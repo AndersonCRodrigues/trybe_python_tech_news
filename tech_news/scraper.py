@@ -1,10 +1,11 @@
 import requests
 import time
+from bs4 import BeautifulSoup
 
 
 # Requisito 1
 def fetch(url):
-    headers = {'user-agent': 'Fake user-agent'}
+    headers = {"user-agent": "Fake user-agent"}
 
     try:
         response = requests.get(url, headers=headers, timeout=3)
@@ -16,8 +17,14 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    soup = BeautifulSoup(html_content, "html.parser")
+
+    news_urls = [
+        post.find("a")["href"]
+        for post in soup.find_all("article", class_="entry-preview")
+    ]
+
+    return news_urls
 
 
 # Requisito 3
